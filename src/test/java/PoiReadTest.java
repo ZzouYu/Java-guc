@@ -59,11 +59,20 @@ public class PoiReadTest {
         for (int rowNum = 1; rowNum < rowCount ; rowNum++) {
             Row rowData = sheet.getRow(rowNum);
             if(null!=rowData){
+                int rowsize = 0;
                 for (int cellNum = 0; cellNum < cellNums; cellNum++) {
                     Cell cell = rowData.getCell(cellNum);
                     if (cell!=null){
-                        readExcelValue(cell,formulaEvaluator);
+                        String value = readExcelValue(cell, formulaEvaluator);
+                    }else{
+                        if( null == cell) {
+                            rowsize+=1;
+                        }
                     }
+                }
+                //防止脏读
+                if(rowsize == cellNums){
+                    break;
                 }
             }
             System.out.println("------");
